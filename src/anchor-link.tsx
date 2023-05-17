@@ -1,14 +1,19 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
+import * as polyfill from 'smoothscroll-polyfill';
 
-class AnchorLink extends Component {
-  constructor(props) {
+type OffsetType = string | number | (() => number);
+
+export class AnchorLink extends Component<{ href: string, offset: OffsetType, onClick: (event: any) => void }> {
+  constructor(props: any) {
     super(props)
     this.smoothScroll = this.smoothScroll.bind(this)
   }
+
   componentDidMount() {
-    require('smoothscroll-polyfill').polyfill()
+    polyfill.polyfill()
   }
-  smoothScroll(event) {
+
+  smoothScroll(event: any) {
     event.preventDefault()
     const e = { ...event }
     const { href } = this.props;
@@ -16,15 +21,20 @@ class AnchorLink extends Component {
       history.pushState({}, '', href)
       window.dispatchEvent(new Event('hashchange'))
     }
+
     setTimeout(() => {
-      let offset = () => 0
-      if (typeof this.props.offset !== 'undefined') {
-        if (!!(this.props.offset && this.props.offset.constructor && this.props.offset.apply)) {
-          offset = this.props.offset
+      let offset: () => number = () => 0
+      let offsetType = typeof this.props.offset;
+      if (offsetType !== 'undefined') {
+        if (offsetType === "string") {
+          offset = () => parseInt(this.props.offset as string)
+        } else if (offsetType == "number") {
+          offset = () => this.props.offset as number;
         } else {
-          offset = () => parseInt(this.props.offset)
+          offset = this.props.offset as () => number;
         }
       }
+
       const id = e.currentTarget.getAttribute('href').slice(1)
       const $anchor = document.getElementById(id);
       // Check if the change occurs for the x or y axis
@@ -39,7 +49,7 @@ class AnchorLink extends Component {
           behavior: 'smooth'
         });
       }
-      if (this.props.onClick) {this.props.onClick(e)}
+      if (this.props.onClick) { this.props.onClick(e) }
     }, 0);
   }
   render() {

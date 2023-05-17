@@ -1,4 +1,4 @@
-# React Anchor Link Smooth Scroll v2
+# React Anchor Link Smooth Scroll Typescript
 
 This is a fork from [react-anchor-link-smooth-scroll](https://github.com/mauricevancooten/react-anchor-link-smooth-scroll) with horizontal scroll feature and merged bug fixes. 
 
@@ -8,13 +8,13 @@ React component for anchor links using the [smoothscroll](https://github.com/iam
 
 ## Instructions
 
-1. Install dependency: `npm install react-anchor-link-smooth-scroll-v2`
+1. Install dependency: `npm install react-anchor-link-smooth-scroll-ts`
 
 2. Add script
     ```js
     import React from 'react'
     import ReactDOM from 'react-dom'
-    import AnchorLink from 'react-anchor-link-smooth-scroll-v2'
+    import AnchorLink from 'react-anchor-link-smooth-scroll-ts'
 
     const SmoothScroll = () => (
       <div>
@@ -50,6 +50,9 @@ React component for anchor links using the [smoothscroll](https://github.com/iam
       ```
 
 ## Changelog
+
+v.1.2.0 (May 16th 2023)
+* Converted component to TypeScript.
 
 v.1.1.0 (October 28th 2021)
 * [@john555](https://github.com/john555) Fix collision with 'hashchange' event handlers

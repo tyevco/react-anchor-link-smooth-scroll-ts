@@ -22,15 +22,19 @@
   },
   "homepage": "https://github.com/webartistse/react-anchor-link-smooth-scroll-v2#readme",
   "devDependencies": {
+    "@types/react": "^18.2.6",
+    "@types/smoothscroll-polyfill": "^0.3.1",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-minify-webpack-plugin": "^0.2.0",
+    "babel-loader": "^9.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "react": "^15.6.2",
-    "smoothscroll-polyfill": "^0.4.3",
-    "webpack": "^3.12.0"
+    "react": "^15.7.0",
+    "smoothscroll-polyfill": "^0.4.4",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.82.1",
+    "webpack-cli": "^5.1.1"
   },
   "babel": {
     "presets": [

@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
-const MinifyPlugin = require('babel-minify-webpack-plugin')
+//const MinifyPlugin = require('babel-minify-webpack-plugin')
 
 let libraryName = 'anchor-link'
 let outputFile
@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const config = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'lib'),
     filename: outputFile,
@@ -22,11 +22,19 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.js?$/,
         exclude: /(node_modules)/,
         loader: 'babel-loader'
       }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
   },
   externals: {
     react: 'react'
@@ -40,8 +48,8 @@ const config = {
   ]
 }
 
-if (process.env.NODE_ENV === 'production') {
-  config.plugins.push(new MinifyPlugin())
-}
+// if (process.env.NODE_ENV === 'production') {
+//   config.plugins.push(new MinifyPlugin())
+// }
 
 module.exports = config
