@@ -51,7 +51,7 @@ React component for anchor links using the [smoothscroll](https://github.com/iam
 
 ## Changelog
 
-v.1.2.0 (May 16th 2023)
+v.2.0.1 (May 17th 2023)
 * Converted component to TypeScript.
 
 v.1.1.0 (October 28th 2021)
