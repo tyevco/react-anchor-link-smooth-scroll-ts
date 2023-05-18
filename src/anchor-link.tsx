@@ -1,37 +1,33 @@
-import React, { Component } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import * as polyfill from 'smoothscroll-polyfill';
 
 type OffsetType = string | number | (() => number);
 
-export class AnchorLink extends Component<{ href?: string, offset?: OffsetType, onClick?: (event: any) => void }> {
-  constructor(props: any) {
-    super(props)
-    this.smoothScroll = this.smoothScroll.bind(this)
-  }
+export function AnchorLink(props: { href?: string, offset?: OffsetType, onClick?: (event: any) => void }) {
+  const { offset, ...rest } = props;
 
-  componentDidMount() {
-    polyfill.polyfill()
-  }
+  useEffect(() => polyfill.polyfill(), []);
 
-  smoothScroll(event: any) {
+  const smoothScroll = useCallback((event: any) => {
     event.preventDefault()
     const e = { ...event }
-    const { href } = this.props;
+    const { href, onClick } = rest;
+
     if (history.pushState && href) {
       history.pushState({}, '', href)
       window.dispatchEvent(new Event('hashchange'))
     }
 
     setTimeout(() => {
-      let offset: () => number = () => 0
-      let offsetType = typeof this.props.offset;
+      let offsetCallback: () => number = () => 0
+      let offsetType = typeof offset;
       if (offsetType !== 'undefined') {
         if (offsetType === "string") {
-          offset = () => parseInt(this.props.offset as string)
+          offsetCallback = () => parseInt(offset as string)
         } else if (offsetType == "number") {
-          offset = () => this.props.offset as number;
+          offsetCallback = () => offset as number;
         } else {
-          offset = this.props.offset as () => number;
+          offsetCallback = offset as () => number;
         }
       }
 
@@ -40,24 +36,18 @@ export class AnchorLink extends Component<{ href?: string, offset?: OffsetType, 
       // Check if the change occurs for the x or y axis
       if ($anchor && $anchor.getBoundingClientRect().top !== 0) {
         window.scroll({
-          top: $anchor.getBoundingClientRect().top + window.pageYOffset - offset(),
+          top: $anchor.getBoundingClientRect().top + window.scrollY - offsetCallback(),
           behavior: 'smooth'
         });
       } else if ($anchor && $anchor.getBoundingClientRect().left !== 0) {
         window.scroll({
-          left: $anchor.getBoundingClientRect().left + window.pageXOffset - offset(),
+          left: $anchor.getBoundingClientRect().left + window.scrollX - offsetCallback(),
           behavior: 'smooth'
         });
       }
-      if (this.props.onClick) { this.props.onClick(e) }
+      if (onClick) { onClick(e) }
     }, 0);
-  }
-  render() {
-    const { offset, ...rest } = this.props;
-    return (
-      <a {...rest} onClick={this.smoothScroll} />
-    )
-  }
-}
+  }, [offset, rest]);
 
-export default AnchorLink
+  return <a {...rest} onClick={smoothScroll} />;
+}

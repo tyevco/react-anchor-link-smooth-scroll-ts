@@ -40,20 +40,6 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-    if (typeof b !== "function" && b !== null)
-        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
 
 var __assign = function() {
     __assign = Object.assign || function __assign(t) {
@@ -78,37 +64,29 @@ function __rest(s, e) {
     return t;
 }
 
-var AnchorLink = /** @class */ (function (_super) {
-    __extends(AnchorLink, _super);
-    function AnchorLink(props) {
-        var _this = _super.call(this, props) || this;
-        _this.smoothScroll = _this.smoothScroll.bind(_this);
-        return _this;
-    }
-    AnchorLink.prototype.componentDidMount = function () {
-        polyfill__namespace.polyfill();
-    };
-    AnchorLink.prototype.smoothScroll = function (event) {
-        var _this = this;
+function AnchorLink(props) {
+    var offset = props.offset, rest = __rest(props, ["offset"]);
+    React.useEffect(function () { return polyfill__namespace.polyfill(); }, []);
+    var smoothScroll = React.useCallback(function (event) {
         event.preventDefault();
         var e = __assign({}, event);
-        var href = this.props.href;
+        var href = rest.href, onClick = rest.onClick;
         if (history.pushState && href) {
             history.pushState({}, '', href);
             window.dispatchEvent(new Event('hashchange'));
         }
         setTimeout(function () {
-            var offset = function () { return 0; };
-            var offsetType = typeof _this.props.offset;
+            var offsetCallback = function () { return 0; };
+            var offsetType = typeof offset;
             if (offsetType !== 'undefined') {
                 if (offsetType === "string") {
-                    offset = function () { return parseInt(_this.props.offset); };
+                    offsetCallback = function () { return parseInt(offset); };
                 }
                 else if (offsetType == "number") {
-                    offset = function () { return _this.props.offset; };
+                    offsetCallback = function () { return offset; };
                 }
                 else {
-                    offset = _this.props.offset;
+                    offsetCallback = offset;
                 }
             }
             var id = e.currentTarget.getAttribute('href').slice(1);
@@ -116,27 +94,23 @@ var AnchorLink = /** @class */ (function (_super) {
             // Check if the change occurs for the x or y axis
             if ($anchor && $anchor.getBoundingClientRect().top !== 0) {
                 window.scroll({
-                    top: $anchor.getBoundingClientRect().top + window.pageYOffset - offset(),
+                    top: $anchor.getBoundingClientRect().top + window.scrollY - offsetCallback(),
                     behavior: 'smooth'
                 });
             }
             else if ($anchor && $anchor.getBoundingClientRect().left !== 0) {
                 window.scroll({
-                    left: $anchor.getBoundingClientRect().left + window.pageXOffset - offset(),
+                    left: $anchor.getBoundingClientRect().left + window.scrollX - offsetCallback(),
                     behavior: 'smooth'
                 });
             }
-            if (_this.props.onClick) {
-                _this.props.onClick(e);
+            if (onClick) {
+                onClick(e);
             }
         }, 0);
-    };
-    AnchorLink.prototype.render = function () {
-        var _a = this.props; _a.offset; var rest = __rest(_a, ["offset"]);
-        return (React.createElement("a", __assign({}, rest, { onClick: this.smoothScroll })));
-    };
-    return AnchorLink;
-}(React.Component));
+    }, [offset, rest]);
+    return React.createElement("a", __assign({}, rest, { onClick: smoothScroll }));
+}
 
 exports.AnchorLink = AnchorLink;
 exports.default = AnchorLink;

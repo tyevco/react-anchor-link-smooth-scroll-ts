@@ -1,13 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 type OffsetType = string | number | (() => number);
-export declare class AnchorLink extends Component<{
+export declare function AnchorLink(props: {
     href?: string;
     offset?: OffsetType;
     onClick?: (event: any) => void;
-}> {
-    constructor(props: any);
-    componentDidMount(): void;
-    smoothScroll(event: any): void;
-    render(): React.JSX.Element;
-}
-export default AnchorLink;
+}): React.JSX.Element;
+export {};
