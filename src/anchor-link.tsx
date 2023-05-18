@@ -3,7 +3,7 @@ import * as polyfill from 'smoothscroll-polyfill';
 
 type OffsetType = string | number | (() => number);
 
-export class AnchorLink extends Component<{ href: string, offset: OffsetType, onClick: (event: any) => void }> {
+export class AnchorLink extends Component<{ href?: string, offset?: OffsetType, onClick?: (event: any) => void }> {
   constructor(props: any) {
     super(props)
     this.smoothScroll = this.smoothScroll.bind(this)
